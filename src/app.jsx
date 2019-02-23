@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TabsWrapper from './components/Tabs';
-import tabs from './tabs';
+import Main from './components/Main';
 
 export default () => {
   ReactDOM.render(
-    <TabsWrapper tabs={tabs} />,
+    <Main />,
     document.getElementById('root'),
   );
 };
