@@ -44,9 +44,9 @@ describe('without snapshot', () => {
     const removeBtn = getControlTabs(wrapper).at(0).find('button');
     removeBtn.simulate('click');
 
-    const tabsAmountAfterAdd = tabsAmount - 1;
+    const tabsAmountAfterRemove = tabsAmount - 1;
 
-    expect(wrapper).toContainMatchingElements(tabsAmountAfterAdd, '[data-test="tab-control"] > li');
-    expect(wrapper).toContainMatchingElements(tabsAmountAfterAdd, '[data-test="tab-content"] > div');
+    expect(wrapper).toContainMatchingElements(tabsAmountAfterRemove, '[data-test="tab-control"] > li');
+    expect(wrapper).toContainMatchingElements(tabsAmountAfterRemove, '[data-test="tab-content"] > div');
   });
 });
