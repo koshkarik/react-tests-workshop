@@ -1,25 +1,52 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import Tabs from '../src/components/Tabs';
-import tabs from '../src/tabs';
+import App from '../src/components/Main';
 
-test('example', () => {
-  const wrapper = mount(<Tabs tabs={tabs} />);
-  expect(wrapper.render()).toMatchSnapshot();
+const getControlTabs = wrapper => wrapper.find('[data-test="tab-control"] > li');
 
-  const tab1 = wrapper.find('[data-testid="tab_0"] > li');
-  const tab2 = wrapper.find('[data-testid="tab_1"] > li');
-  const tab3 = wrapper.find('[data-testid="tab_2"] > li');
+describe('snapshot', () => {
+  it('should change tab', () => {
+    const wrapper = mount(<App />);
+    const tabs = getControlTabs(wrapper);
+    const testIndex = 1;
 
-  console.log(tab1.debug({ ignoreProps: true }));
+    expect(tabs.at(testIndex)).not.toMatchSelector('[aria-selected="true"]');
+    tabs.at(testIndex).simulate('click');
 
-  tab1.simulate('click');
-  expect(wrapper.render()).toMatchSnapshot();
+    expect(getControlTabs(wrapper).at(testIndex)).toMatchSelector('[aria-selected="true"]');
+  });
+});
 
-  tab2.simulate('click');
-  expect(wrapper.render()).toMatchSnapshot();
+describe('without snapshot', () => {
+  it('should add new tab', () => {
+    const wrapper = mount(<App />);
+    const tabsAmount = 2;
 
-  tab3.simulate('click');
-  expect(wrapper.render()).toMatchSnapshot();
+    expect(wrapper).toContainMatchingElements(tabsAmount, '[data-test="tab-control"] > li');
+    expect(wrapper).toContainMatchingElements(tabsAmount, '[data-test="tab-content"] > div');
+    const addButton = wrapper.find('[data-test="add-tab-btn"]');
+    addButton.simulate('click');
+
+    const tabsAmountAfterAdd = tabsAmount + 1;
+
+    expect(wrapper).toContainMatchingElements(tabsAmountAfterAdd, '[data-test="tab-control"] > li');
+    expect(wrapper).toContainMatchingElements(tabsAmountAfterAdd, '[data-test="tab-content"] > div');
+  });
+
+  it('shoud remove tab', () => {
+    const wrapper = mount(<App />);
+    const tabsAmount = 2;
+
+    expect(wrapper).toContainMatchingElements(tabsAmount, '[data-test="tab-control"] > li');
+    expect(wrapper).toContainMatchingElements(tabsAmount, '[data-test="tab-content"] > div');
+
+    const removeBtn = getControlTabs(wrapper).at(0).find('button');
+    removeBtn.simulate('click');
+
+    const tabsAmountAfterAdd = tabsAmount - 1;
+
+    expect(wrapper).toContainMatchingElements(tabsAmountAfterAdd, '[data-test="tab-control"] > li');
+    expect(wrapper).toContainMatchingElements(tabsAmountAfterAdd, '[data-test="tab-content"] > div');
+  });
 });

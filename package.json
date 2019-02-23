@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "test:watch": "jest --watch",
     "eslint": "eslint",
     "webpack": "webpack",
@@ -27,12 +28,15 @@
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "axios": "^0.18.0",
+    "debug": "^4.1.1",
     "lodash": "^4.17.11",
     "prop-types": "^15.7.2",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-jss": "^8.6.1",
-    "react-tabs": "^3.0.0"
+    "react-lumberjack": "^2.0.0",
+    "react-tabs": "^3.0.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

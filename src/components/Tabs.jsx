@@ -1,5 +1,7 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import _ from 'lodash';
+import uuid from 'uuid';
+// import 'react-lumberjack';
 import {
   Tab,
   Tabs,
@@ -8,50 +10,85 @@ import {
 } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-export default class TabsWrapper extends PureComponent {
-  static propTypes = {
-    tabs: PropTypes.array.isRequired,
-  };
+const addButtonStyle = {
+  marginTop: 20,
+  padding: 8,
+};
 
+export default class MyTabs extends React.Component {
   state = {
-    selectedTabInd: 0,
+    tabs: [
+      {
+        title: 'Tab 1',
+        description: 'content 1',
+        id: uuid(),
+      },
+      {
+        title: 'Tab 2',
+        description: 'content 2',
+        id: uuid(),
+      },
+    ],
   };
 
-  onSelectTab = (ind) => {
-    this.setState({
-      selectedTabInd: ind,
-    });
+  onRemove = id => () => {
+    this.setState(prevState => ({
+      tabs: _.reject(prevState.tabs, { id }),
+    }));
   }
 
+  onCreateTab = () => {
+    const newTab = {
+      title: `title ${Math.random()}`,
+      description: `description ${Math.random()}`,
+      id: uuid(),
+    };
+
+    this.setState(prevState => ({
+      tabs: [...prevState.tabs, newTab],
+    }));
+  }
+
+  renderRemoveButton = id => (
+    <button type="button" onClick={this.onRemove(id)}>X</button>
+  )
+
   renderTabs = () => {
-    const { tabs } = this.props;
-    return tabs.map(tab => (
-      <Tab key={tab.key} data-testid={`tab_${tab.key}`}>
-        {tab.label}
+    const { tabs } = this.state;
+    return tabs.map(({ id, title }) => (
+      <Tab key={id} data-test="tab-control">
+        {title}
+        {this.renderRemoveButton(id)}
       </Tab>
     ));
   }
 
   renderTabPanels = () => {
-    const { tabs } = this.props;
-    return tabs.map(tab => (
-      <TabPanel key={tab.key}>
-        {tab.content}
+    const { tabs } = this.state;
+    return tabs.map(({ id, description }) => (
+      <TabPanel key={id} data-test="tab-content">
+        {description}
       </TabPanel>
     ));
   }
 
   render() {
-    const { selectedTabInd } = this.state;
-
     return (
       <React.Fragment>
-        <Tabs onSelect={this.onSelectTab} selectedIndex={selectedTabInd}>
+        <Tabs data-test="tabs-container">
           <TabList>
             {this.renderTabs()}
           </TabList>
           {this.renderTabPanels()}
         </Tabs>
+        <button
+          data-test="add-tab-btn"
+          style={addButtonStyle}
+          type="button"
+          onClick={this.onCreateTab}
+        >
+          {'Add new Tab'}
+        </button>
       </React.Fragment>
     );
   }
