@@ -1,11 +1,8 @@
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { mount } from 'enzyme';
 
 import Tabs from '../src/components/Tabs';
 import tabs from '../src/tabs';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 test('example', () => {
   const wrapper = mount(<Tabs tabs={tabs} />);

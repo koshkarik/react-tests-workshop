@@ -10,22 +10,12 @@ import 'react-tabs/style/react-tabs.css';
 
 export default class TabsWrapper extends PureComponent {
   static propTypes = {
-    tabs: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        content: PropTypes.string,
-        label: PropTypes.string,
-      }),
-    ).isRequired,
+    tabs: PropTypes.array.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      selectedTabInd: 0,
-    };
-  }
+  state = {
+    selectedTabInd: 0,
+  };
 
   onSelectTab = (ind) => {
     this.setState({
