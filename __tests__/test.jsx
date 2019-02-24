@@ -47,10 +47,10 @@ describe('change tab', () => {
     const testIndex = 1;
     const secondTab = page.getControlTabAt(testIndex);
 
-    expect(secondTab).not.toHaveProp(ARIA_SELECTED, "true");
+    expect(secondTab).not.toHaveProp(ARIA_SELECTED, 'true');
     secondTab.simulate('click');
 
-    expect(page.getControlTabAt(testIndex)).toHaveProp(ARIA_SELECTED, "true");
+    expect(page.getControlTabAt(testIndex)).toHaveProp(ARIA_SELECTED, 'true');
   });
 });
 
@@ -108,16 +108,16 @@ describe('tabs crud', () => {
     cookie.set.mockImplementation((s, i) => cookies.set(i));
     cookie.get.mockImplementation(() => cookies.get());
 
-    expect(secondTab).not.toHaveProp(ARIA_SELECTED, "true");
+    expect(secondTab).not.toHaveProp(ARIA_SELECTED, 'true');
     secondTab.simulate('click');
 
     expect(new Page(wrapper).getControlTabAt(testIndex))
-      .toHaveProp(ARIA_SELECTED, "true");
+      .toHaveProp(ARIA_SELECTED, 'true');
 
     const wrapper2 = mount(<App />);
 
     expect(new Page(wrapper2).getControlTabAt(testIndex))
-      .toHaveProp(ARIA_SELECTED, "true");
+      .toHaveProp(ARIA_SELECTED, 'true');
   });
 
   it('shoul add tab from rss feed', async () => {
@@ -146,7 +146,7 @@ describe('tabs crud', () => {
 
     expect(wrapper).toContainMatchingElements(3, CONTROL_TABS);
     const addedTab = page.getControlTabAt(2);
-    expect(addedTab).toHaveProp(ARIA_SELECTED, "true");
+    expect(addedTab).toHaveProp(ARIA_SELECTED, 'true');
     expect(addedTab).toIncludeText(url);
   });
 });
