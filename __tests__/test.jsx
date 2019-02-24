@@ -15,7 +15,7 @@ const ADD_BUTTON = '[data-test="add-tab-btn"]';
 const OPEN_DIALOG_BUTTON = '[data-test="add-tab-from-feed"]';
 const FETCH_FEED_BUTTON = '[data-test="fetch-feed"]';
 const INPUT_FIELD = '[data-test="input-field"]';
-const ARIA_SELECTED = '[aria-selected="true"]';
+const ARIA_SELECTED = 'aria-selected';
 const FORM = '[data-test="form"]';
 
 export default class Page {
@@ -47,11 +47,10 @@ describe('change tab', () => {
     const testIndex = 1;
     const secondTab = page.getControlTabAt(testIndex);
 
-    expect(secondTab).not.toMatchSelector(ARIA_SELECTED);
+    expect(secondTab).not.toHaveProp(ARIA_SELECTED, "true");
     secondTab.simulate('click');
 
-    expect(new Page(wrapper).getControlTabAt(testIndex))
-      .toMatchSelector(ARIA_SELECTED);
+    expect(page.getControlTabAt(testIndex)).toHaveProp(ARIA_SELECTED, "true");
   });
 });
 
@@ -109,16 +108,16 @@ describe('tabs crud', () => {
     cookie.set.mockImplementation((s, i) => cookies.set(i));
     cookie.get.mockImplementation(() => cookies.get());
 
-    expect(secondTab).not.toMatchSelector(ARIA_SELECTED);
+    expect(secondTab).not.toHaveProp(ARIA_SELECTED, "true");
     secondTab.simulate('click');
 
     expect(new Page(wrapper).getControlTabAt(testIndex))
-      .toMatchSelector(ARIA_SELECTED);
+      .toHaveProp(ARIA_SELECTED, "true");
 
     const wrapper2 = mount(<App />);
 
     expect(new Page(wrapper2).getControlTabAt(testIndex))
-      .toMatchSelector(ARIA_SELECTED);
+      .toHaveProp(ARIA_SELECTED, "true");
   });
 
   it('shoul add tab from rss feed', async () => {
@@ -147,7 +146,7 @@ describe('tabs crud', () => {
 
     expect(wrapper).toContainMatchingElements(3, CONTROL_TABS);
     const addedTab = page.getControlTabAt(2);
-    expect(addedTab).toMatchSelector(ARIA_SELECTED);
+    expect(addedTab).toHaveProp(ARIA_SELECTED, "true");
     expect(addedTab).toIncludeText(url);
   });
 });
