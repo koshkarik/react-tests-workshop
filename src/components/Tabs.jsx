@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import _ from 'lodash';
 import uuid from 'uuid';
+import cookies from 'js-cookie';
 // import 'react-lumberjack';
 import {
   Tab,
@@ -17,15 +17,9 @@ const addButtonStyle = {
 };
 
 export default class MyTabs extends React.Component {
-  static propTypes = {
-    storage: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
-    const { storage } = props;
-
-    const activeTabIndex = Number(storage.get('activeTabIndex')) || 0;
+    const activeTabIndex = Number(cookies.get('activeTabIndex')) || 0;
 
     this.state = {
       activeTabIndex,
@@ -63,12 +57,10 @@ export default class MyTabs extends React.Component {
   }
 
   onSelectTab = (tabIndex) => {
-    const { storage } = this.props;
-
     this.setState({
       activeTabIndex: tabIndex,
     });
-    storage.set('activeTabIndex', tabIndex);
+    cookies.set('activeTabIndex', tabIndex);
   }
 
   renderRemoveButton = id => (
