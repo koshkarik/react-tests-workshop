@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import uuid from 'uuid';
 // import 'react-lumberjack';
@@ -16,20 +17,32 @@ const addButtonStyle = {
 };
 
 export default class MyTabs extends React.Component {
-  state = {
-    tabs: [
-      {
-        title: 'Tab 1',
-        description: 'content 1',
-        id: uuid(),
-      },
-      {
-        title: 'Tab 2',
-        description: 'content 2',
-        id: uuid(),
-      },
-    ],
-  };
+  static propTypes = {
+    storage: PropTypes.func.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    const { storage } = props;
+
+    const activeTabIndex = Number(storage.get('activeTabIndex')) || 0;
+
+    this.state = {
+      activeTabIndex,
+      tabs: [
+        {
+          title: 'Tab 1',
+          description: 'content 1',
+          id: uuid(),
+        },
+        {
+          title: 'Tab 2',
+          description: 'content 2',
+          id: uuid(),
+        },
+      ],
+    };
+  }
 
   onRemove = id => () => {
     this.setState(prevState => ({
@@ -47,6 +60,15 @@ export default class MyTabs extends React.Component {
     this.setState(prevState => ({
       tabs: [...prevState.tabs, newTab],
     }));
+  }
+
+  onSelectTab = (tabIndex) => {
+    const { storage } = this.props;
+
+    this.setState({
+      activeTabIndex: tabIndex,
+    });
+    storage.set('activeTabIndex', tabIndex);
   }
 
   renderRemoveButton = id => (
@@ -73,9 +95,10 @@ export default class MyTabs extends React.Component {
   }
 
   render() {
+    const { activeTabIndex } = this.state;
     return (
       <React.Fragment>
-        <Tabs data-test="tabs-container">
+        <Tabs data-test="tabs-container" selectedIndex={activeTabIndex} onSelect={this.onSelectTab}>
           <TabList>
             {this.renderTabs()}
           </TabList>
