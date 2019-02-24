@@ -1,13 +1,14 @@
 import React from 'react';
 import cookie from 'js-cookie';
+import 'bootstrap/dist/css/bootstrap.css';
 
 import Tabs from './Tabs';
 
 const Main = () => (
-  <React.Fragment>
-    <h1>Hello World</h1>
+  <div className="container">
+    <h1>Simple App for Tests</h1>
     <Tabs storage={cookie} />
-  </React.Fragment>
+  </div>
 );
 
 export default Main;

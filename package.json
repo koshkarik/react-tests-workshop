@@ -26,8 +26,10 @@
   "license": "ISC",
   "homepage": "",
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/polyfill": "^7.2.5",
     "axios": "^0.18.0",
+    "bootstrap": "^4.3.1",
     "debug": "^4.1.1",
     "js-cookie": "^2.2.0",
     "lodash": "^4.17.11",
@@ -35,9 +37,13 @@
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-jss": "^8.6.1",
+    "react-loader-spinner": "^2.3.0",
     "react-lumberjack": "^2.0.0",
+    "react-responsive-modal": "^3.6.0",
     "react-tabs": "^3.0.0",
-    "uuid": "^3.3.2"
+    "rss-parser": "^3.6.2",
+    "uuid": "^3.3.2",
+    "xml-parse": "^0.3.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

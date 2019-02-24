@@ -25,7 +25,7 @@ export default class Page {
   getAddButton = () => this.wrapper.find(ADD_BUTTON)
 }
 
-describe('snapshot', () => {
+describe('change tab', () => {
   it('should change tab', () => {
     const wrapper = mount(<App />);
     const page = new Page(wrapper);
@@ -40,7 +40,7 @@ describe('snapshot', () => {
   });
 });
 
-describe('without snapshot', () => {
+describe('tabs crud', () => {
   it('should add new tab', () => {
     const wrapper = mount(<App />);
     const tabsAmount = 2;
