@@ -1,7 +1,10 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import cookie from 'js-cookie';
+import nock from 'nock';
+import delay from 'delay';
 
+import feed from '../__fixtures__/feed';
 import App from '../src/components/Main';
 
 jest.mock('js-cookie');
@@ -9,7 +12,11 @@ jest.mock('js-cookie');
 const CONTROL_TABS = '[data-test="tab-control"] > li';
 const CONTENT_TABS = '[data-test="tab-content"] > div';
 const ADD_BUTTON = '[data-test="add-tab-btn"]';
+const OPEN_DIALOG_BUTTON = '[data-test="add-tab-from-feed"]';
+const FETCH_FEED_BUTTON = '[data-test="fetch-feed"]';
+const INPUT_FIELD = '[data-test="input-field"]';
 const ARIA_SELECTED = '[aria-selected="true"]';
+const FORM = '[data-test="form"]';
 
 export default class Page {
   constructor(wrapper) {
@@ -23,6 +30,14 @@ export default class Page {
   getRemoveButtonAtTab = ind => this.getControlTabAt(ind).find('button');
 
   getAddButton = () => this.wrapper.find(ADD_BUTTON)
+
+  getOpenDialogButton = () => this.wrapper.find(OPEN_DIALOG_BUTTON)
+
+  getRequestButton = () => this.wrapper.find(FETCH_FEED_BUTTON)
+
+  getInputField = () => this.wrapper.find(INPUT_FIELD)
+
+  getForm = () => this.wrapper.find(FORM)
 }
 
 describe('change tab', () => {
@@ -104,5 +119,35 @@ describe('tabs crud', () => {
 
     expect(new Page(wrapper2).getControlTabAt(testIndex))
       .toMatchSelector(ARIA_SELECTED);
+  });
+
+  it('shoul add tab from rss feed', async () => {
+    const host = 'https://cors-anywhere.herokuapp.com/';
+    const url = 'http://get-something.go';
+    nock.disableNetConnect();
+    nock(host)
+      .get(`/${url}`)
+      .reply(200, feed);
+
+    const wrapper = mount(<App />);
+    const page = new Page(wrapper);
+
+    expect(wrapper).toContainMatchingElements(2, CONTROL_TABS);
+
+    page.getOpenDialogButton().simulate('click');
+    const inputField = page.getInputField();
+
+    inputField.simulate('change', { target: { value: url } });
+
+    const form = page.getForm();
+    form.simulate('submit');
+
+    await delay(100);
+    wrapper.update();
+
+    expect(wrapper).toContainMatchingElements(3, CONTROL_TABS);
+    const addedTab = page.getControlTabAt(2);
+    expect(addedTab).toMatchSelector(ARIA_SELECTED);
+    expect(addedTab).toIncludeText(url);
   });
 });

@@ -34,7 +34,7 @@ export default class MyTabs extends React.Component {
       rssModalOpen: false,
       isRssFetching: false,
       error: null,
-      rssUrl: 'http://feeds.bbci.co.uk/news/world/rss.xml',
+      rssUrl: '',
       tabs: [
         {
           title: 'Tab 1',
@@ -72,21 +72,24 @@ export default class MyTabs extends React.Component {
 
   onRssSubmit = (e) => {
     const { rssUrl } = this.state;
-
     e.preventDefault();
+
     this.setState({
       isRssFetching: true,
       error: null,
     }, async () => {
       try {
         const rss = await this.getRss(rssUrl);
+
         const newTab = {
           title: rssUrl,
           description: rss.join('\n'),
           id: uuid(),
         };
+
         this.setState(prevState => ({
           tabs: [...prevState.tabs, newTab],
+          activeTabIndex: prevState.tabs.length,
         }));
         this.onCloseRssModal();
       } catch (err) {
@@ -112,7 +115,7 @@ export default class MyTabs extends React.Component {
     };
 
     this.setState(prevState => ({
-      tabs: [...prevState.tabs, newTab],
+      tabs: [...prevState.tabs, newTab]
     }));
   }
 
@@ -198,7 +201,7 @@ export default class MyTabs extends React.Component {
   renderRssForm = () => {
     const { isRssFetching, rssUrl } = this.state;
     return (
-      <form onSubmit={this.onRssSubmit}>
+      <form onSubmit={this.onRssSubmit} data-test="form">
         <div className="input-group mt-4 mb-4">
           <input
             type="text"
@@ -208,6 +211,7 @@ export default class MyTabs extends React.Component {
             placeholder="Enter rss url"
             aria-label="Recipient's username"
             aria-describedby="button-addon2"
+            data-test="input-field"
           />
           <div className="input-group-append">
             <button
@@ -215,6 +219,7 @@ export default class MyTabs extends React.Component {
               className="btn btn-secondary"
               type="submit"
               id="button-addon2"
+              data-test="fetch-feed"
             >
               {'Add'}
             </button>
@@ -238,7 +243,7 @@ export default class MyTabs extends React.Component {
           {'Add new fake Tab'}
         </button>
         <button
-          data-test="add-tab-btn"
+          data-test="add-tab-from-feed"
           className="btn btn-success ml-4"
           type="button"
           onClick={this.onOpenRssModal}
